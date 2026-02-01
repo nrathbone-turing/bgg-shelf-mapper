@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: ./apps/api
+    ports:
+      - "8000:8000"
+    environment:
+      # Keep in sync with .env / .env.example
+      - API_DATA_DIR=/data
+      - BGG_USERNAME=${BGG_USERNAME:-Piman34}
+      - BGG_APP_TOKEN=${BGG_APP_TOKEN:-}
+    volumes:
+      - ./apps/api:/app
+      - api_data:/data
+    command: >
+      sh -c "pip install -r requirements.txt
+      && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  web:
+    build:
+      context: ./apps/web
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:8000}
+      # Vite file watching inside Docker is more reliable with polling
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./apps/web:/app
+    command: >
+      sh -c "npm install
+      && npm run dev -- --host 0.0.0.0 --port 5173"
+    depends_on:
+      - api
+
+volumes:
+  api_data:
