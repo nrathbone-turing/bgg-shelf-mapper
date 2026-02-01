@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+.env/
+
+# Pytest
+.pytest_cache/
+.coverage
+
+# Node / Vite
+node_modules/
+dist/
+.vite/
+
+# OS
+.DS_Store
+
+# SQLite / runtime data
+*.db
+*.sqlite
+/data/
+
+# Docker
+*.log
