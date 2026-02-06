@@ -1,3 +1,5 @@
+from app.bgg.client import BggCollectionItem
+
 def test_bgg_sync_returns_501_without_token(client):
     response = client.post(
         "/api/sync/bgg",
@@ -20,7 +22,6 @@ def test_bgg_sync_returns_501_when_client_not_implemented(client, mocker):
 
     assert response.status_code == 501
     assert "not wired up yet" in response.json()["detail"].lower()
-
 
 def test_bgg_sync_creates_games_from_collection(client, mocker):
     mocker.patch(
