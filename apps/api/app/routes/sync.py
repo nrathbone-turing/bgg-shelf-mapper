@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from ..db import get_db
 from ..schemas import SyncRequest
+from ..bgg.client import fetch_collection
 
 router = APIRouter(tags=["sync"])
 
@@ -14,16 +15,10 @@ router = APIRouter(tags=["sync"])
 @router.post("/api/sync/bgg")
 def sync_bgg(payload: SyncRequest, db: Session = Depends(get_db)) -> dict:
     """
-    Placeholder endpoint.
-
-    When implemented, this will:
-      - download your BGG owned collection
-      - upsert games into the local DB
-      - keep your fixture placements intact
+    Sync the user's BGG collection into the local database.
     """
     token = payload.token or os.getenv("BGG_APP_TOKEN")
     if not token:
-        # Using 501 ("Not Implemented") intentionally while this is a placeholder.
         raise HTTPException(
             status_code=501,
             detail=(
@@ -32,4 +27,14 @@ def sync_bgg(payload: SyncRequest, db: Session = Depends(get_db)) -> dict:
             ),
         )
 
-    raise HTTPException(status_code=501, detail="BGG sync is not wired up yet (seed/sample data only).")
+    try:
+        # Will raise NotImplementedError for now
+        fetch_collection(username=payload.username, token=token)
+    except NotImplementedError:
+        raise HTTPException(
+            status_code=501,
+            detail="BGG sync is not wired up yet (seed/sample data only).",
+        )
+
+    # Will only be reachable once implemented
+    return {"status": "ok"}
