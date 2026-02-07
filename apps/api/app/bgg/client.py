@@ -22,7 +22,7 @@ class BggCollectionItem:
     image_url: str | None
 
 
-def fetch_collection(*, username: str, token: str | None) -> list[BggCollectionItem]:
+def fetch_collection(*, username: str, token: str) -> list[BggCollectionItem]:
     """
     TODO:
       - Call /xmlapi2/collection?username=...&own=1
@@ -33,6 +33,6 @@ def fetch_collection(*, username: str, token: str | None) -> list[BggCollectionI
     raise NotImplementedError("BGG sync is not wired up yet (seed/sample data only).")
 
 
-def fetch_thing_details(*, ids: Iterable[int], token: str | None) -> dict[int, BggCollectionItem]:
+def fetch_thing_details(*, ids: Iterable[int], token: str) -> dict[int, BggCollectionItem]:
     """Placeholder for future enrichment step."""
     raise NotImplementedError
